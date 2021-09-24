@@ -11,7 +11,14 @@ import {selectCartHidden} from './../../redux/cart/cart.selector'
 import {selectCurrentUser} from './../../redux/user/user.selector'
 
 import './header.styles.scss';
+import {
+    HeaderContainer,
+    LogoContainer,
+    OptionsContainer,
+    OptionLink
+} from './header.styles';
 
+/*
 const Header = ({ currentUser,hidden }) => (
   <div className='header'>
     <Link className='logo-container' to='/'>
@@ -39,6 +46,36 @@ const Header = ({ currentUser,hidden }) => (
   
   </div>
 );
+*/
+
+const Header = ({ currentUser,hidden }) => (
+    <HeaderContainer>
+        <LogoContainer to='/'>
+            <Logo className='logo' />
+        </LogoContainer >
+        <OptionsContainer>
+            <OptionLink to='/shop'>
+                SHOP
+            </OptionLink>
+            <OptionLink to='/shop'>
+                CONTACT
+            </OptionLink>
+            {currentUser ? (
+                <div className='option' onClick={() => auth.signOut()}>
+                    SIGN OUT
+                </div>
+            ) : (
+                <OptionLink to='/signin'>
+                    SIGN IN
+                </OptionLink>
+            )}
+            <CartIcon />
+        </OptionsContainer>
+        {!hidden && <CartDropdown />}
+
+    </HeaderContainer>
+);
+
 
 /*
 const mapStateToProps = ({user:{currentUser},cart:{hidden}}) => {
