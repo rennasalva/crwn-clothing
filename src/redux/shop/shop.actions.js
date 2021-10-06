@@ -10,7 +10,7 @@ export const updateCollections = (collectionsMap)=>({
     payload:collectionsMap
 });
 
-export const fetchCollectionsStar = ()=>(
+export const fetchCollectionsStart = ()=>(
     {type: ShopActionTypes.FETCH_COLLECTIONS_START}
 );
 
@@ -31,7 +31,7 @@ export const fetchCollectionsSuccess = collectionsMap =>({
 export const fetchCollectionsStartAsync = () => {
     return (dispatch) =>{
         const collectionRef = firestore.collection('collections');
-        dispatch(fetchCollectionsStar());
+        dispatch(fetchCollectionsStart());
 
         // promise
         collectionRef.get()

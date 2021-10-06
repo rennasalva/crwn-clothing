@@ -10,34 +10,20 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 import Header from './components/header/header.component';
 import CheckoutPage from "./pages/checkout/checkout.component";
 import { auth, createUserProfileDocument,addCollectionAndItems } from './firebase/firebase.utils';
-import { setCurrentUser } from './redux/user/user.actions';
+import { setCurrentUser,checkUserSession } from './redux/user/user.actions';
 import {selectCurrentUser} from './redux/user/user.selector'
 import {createStructuredSelector} from "reselect";
 import {selectCollectionsForPreview} from './redux/shop/shop.selector'
 
 class App extends React.Component {
-  unsubscribeFromAuth = null;
+
 
   componentDidMount() {
-    const { setCurrentUser,collectionsArray } = this.props;
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-        userRef.onSnapshot(snapShot => {
-          setCurrentUser({
-            id: snapShot.id,
-            ...snapShot.data()
-          });
-        });
-      }
-
-      setCurrentUser(userAuth);
-      //addCollectionAndItems('collections',collectionsArray.map(({title,items})=>({title,items})));
-    });
+    const {checkUserSession} = this.props;
+    checkUserSession();
   }
 
   componentWillUnmount() {
-    this.unsubscribeFromAuth();
   }
 
   render() {
@@ -63,22 +49,13 @@ class App extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+  checkUserSession: () => dispatch(checkUserSession())
 });
 
-/*
-const mapStateToProps = ({user}) =>({
-    currentUser: user.currentUser
-});
 
-const mapStateToProps = state =>({
-  currentUser: selectCurrentUser(state)
-});
-*/
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser,
-  collectionsArray : selectCollectionsForPreview
+  currentUser: selectCurrentUser
 });
 
 

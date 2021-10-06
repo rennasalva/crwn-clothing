@@ -17,10 +17,19 @@ firebase.initializeApp(config);
 export const auth           = firebase.auth();
 export const firestore      = firebase.firestore();
 
-const provaider  = new firebase.auth.GoogleAuthProvider();
-provaider.setCustomParameters({prompt : 'select_account'});
+export const googleProvaider  = new firebase.auth.GoogleAuthProvider();
+googleProvaider.setCustomParameters({prompt : 'select_account'});
 
-export const signInWithGoogle = () => auth.signInWithPopup(provaider);
+export const getCurrentUser = () => {
+    return new Promise((resolve,reject)=>{
+        const unsubscribe = auth.onAuthStateChanged(userAuth =>{
+            unsubscribe();
+            resolve(userAuth)
+        },reject)
+    })
+}
+
+//export const signInWithGoogle = () => auth.signInWithPopup(googleProvaider);
 
 export const createUserProfileDocument = async (userAuth,additionalData) =>{
     if(!userAuth) return;
