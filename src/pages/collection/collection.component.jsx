@@ -1,12 +1,16 @@
 import React from "react";
 import './collection.styles.scss';
 import CollectionItem from "../../components/collection-item/collection-item.component";
-import {connect} from "react-redux";
+import {connect,useSelector,useDispatch} from "react-redux";
 import {selectCollection} from '../../redux/shop/shop.selector';
 import CollectionPreview from "../../components/collection-preview/collection-preview.component";
+import {useParams,useHistory} from "react-router-dom";
 
-const CollectionPage = ({collection}) =>{
-    const {title,items } = collection;
+const CollectionPage = () =>{
+
+    const params                = useParams();  // dell'ogetto match.params.collectionId
+    const collection            = useSelector(selectCollection(params.collectionId));
+    const {title,items }        = collection;
     return (
         <div className='collection-page'>
             <h2 className='title'>{title}</h2>
@@ -26,4 +30,4 @@ const mapStateToProps =(state,ownProps)=>(
     }
 );
 
-export default  connect(mapStateToProps)(CollectionPage);
+export default  CollectionPage;

@@ -1,5 +1,5 @@
-import React from "react";
-import {connect} from "react-redux";
+import React,{useEffect} from "react";
+import {useDispatch} from "react-redux";
 import {selectCollections} from './../../redux/shop/shop.selector'
 import CollectionPage from "../collection/collection.component";
 import {Route} from "react-router-dom";
@@ -9,16 +9,15 @@ import CollectionPageContainer from '../collection/collection.container';
 
 
 
-class ShopPage extends React.Component{
+const  ShopPage = ({match})=>{
 
-    componentDidMount() {
-        const { fetchCollectionsStart } = this.props;
-        fetchCollectionsStart();
-    }
+    const dispatch = useDispatch();
 
-    render(){
-        const {match} = this.props
-        return (
+    useEffect(() => {
+        dispatch(fetchCollectionsStart());
+    }, [dispatch]);
+
+    return (
             <div className="shop-page">
                 <Route
                     exact
@@ -31,13 +30,15 @@ class ShopPage extends React.Component{
                 />
             </div>
         )
-    }
 
 }
 
-
+/*
 const mapDispatchToProps = (dispatch) =>({
     fetchCollectionsStart: () => dispatch(fetchCollectionsStart())
 });
 
 export default connect(null,mapDispatchToProps)(ShopPage);
+*/
+
+export default ShopPage;
